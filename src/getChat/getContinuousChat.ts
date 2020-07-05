@@ -29,9 +29,14 @@ export const getChatCommentPartially: GetChatCommentPartially = async (
   const ytInitialData = parseInitialData(html);
 
   // extraction: next continuation ID
-  const nextContID =
-    ytInitialData.continuationContents.liveChatContinuation.continuations[0]
-      .liveChatReplayContinuationData.continuation;
+  let nextContID: string | undefined;
+  try {
+    nextContID =
+      ytInitialData.continuationContents.liveChatContinuation.continuations[0]
+        .liveChatReplayContinuationData.continuation;
+  } catch (e) {
+    nextContID = undefined;
+  }
 
   // extraction: comments
   const comments = ytInitialData.continuationContents.liveChatContinuation.actions.map(

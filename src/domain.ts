@@ -43,4 +43,4 @@ export type GetInitialContinuationID = (
 
 export type GetChatCommentPartially = (
   contID: ContinuationID
-) => Promise<[Comment[], ContinuationID]>;
+) => Promise<[Comment[], ContinuationID | undefined]>;
