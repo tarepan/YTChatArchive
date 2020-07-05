@@ -5,6 +5,7 @@ reports/auto_settlement_old.txt
 src/forView.json
 logs/openedArbs.json
 newArb.json
+output/**/*
 
 # Logs
 *.log

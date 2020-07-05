@@ -58,7 +58,12 @@ export type YouTubeliveChatAction = {
     actions: [
       {
         addChatItemAction: {
-          item: ViewerEngagementRendererItem | liveChatTextMessageRendererItem;
+          item:
+            | ViewerEngagementRendererItem
+            | liveChatTextMessageRendererItem
+            | PaidMessageRendererItem
+            | MembershipRendererItem
+            | PlaceholderRendererItem;
           clientId: string;
         };
       }
@@ -92,13 +97,7 @@ export type liveChatTextMessageRendererItem = {
     authorName: {
       simpleText: string; // e.g. "Uge Channel / 杏戸ゆげ 【ブイアパ】"
     };
-    authorPhoto: {
-      thumbnails: {
-        url: string; // e.g. "https://yt3.ggpht.com/-3k7QNEiQCWQ/AAAAAAAAAAI/AAAAAAAAAAA/46KJsoSwmog/s32-c-k-no-mo-rj-c0xffffff/photo.jpg";
-        width: number; // e.g. 32
-        height: number; // 3.g. 32
-      }[]; // 2 items (32x32 & 64x64 images) @2020-07-03
-    };
+    authorPhoto: AuthorPhoto;
     contextMenuEndpoint: {
       clickTrackingParams: string;
       commandMetadata: {
@@ -124,6 +123,153 @@ export type liveChatTextMessageRendererItem = {
       simpleText: string; // e.g. "0:20"
     };
   };
+};
+
+//
+export type PaidMessageRendererItem = {
+  liveChatPaidMessageRenderer: {
+    id: string; // e.g. "ChwKGkNLUE8wSUgtay1FQ0ZSVTFLZ29kalM4T3N3";
+    timestampUsec: string; // e.g. "1553197098810701";
+    authorName: {
+      simpleText: string; // e.g. "微糖";
+    };
+    authorPhoto: AuthorPhoto;
+    purchaseAmountText: {
+      simpleText: string; // "￥1,000";
+    };
+    message?: {
+      runs: (runText | runEmoji)[];
+    };
+    headerBackgroundColor: number; // e.g. 4294947584;
+    headerTextColor: number; // e.g. 3741319168;
+    bodyBackgroundColor: number; // e.g. 4294953512;
+    bodyTextColor: number; // e.g. 3741319168;
+    authorExternalChannelId: string; // "UCCe7Y7CDRagNeDq7Knf6yLw";
+    authorNameTextColor: number; // e.g. 2315255808;
+    contextMenuEndpoint: {
+      commandMetadata: {
+        webCommandMetadata: {
+          ignoreNavigation: boolean;
+        };
+      };
+      liveChatItemContextMenuEndpoint: {
+        params: string; // e.g. "Q2g0S0hBb2FRMHRRVHpCSlNDMXJMVVZEUmxKVk1VdG5iMlJxVXpoUGMzY1FBQm80R2cwS0MwdDVhSE5zV21WTmVuRTRLaWNLR0ZWRE0wVm9jM1ZMWkVWclNUazVWRmRhZDFwblYzVjBaeElMUzNsb2MyeGFaVTE2Y1RnZ0FTZ0VNaG9LR0ZWRFEyVTNXVGREUkZKaFowNWxSSEUzUzI1bU5ubE1kdyUzRCUzRA==";
+      };
+    };
+    timestampColor: number; // e.g. 2147483648;
+    contextMenuAccessibility: {
+      accessibilityData: {
+        label: string; // e.g. "コメントの操作";
+      };
+    };
+    timestampText: {
+      simpleText: string; // e.g. "1:59:54";
+    };
+  };
+};
+
+//
+export type PaidStickerRendererItem = {
+  liveChatPaidStickerRenderer: {
+    id: string; // e.g. "ChwKGkNLN1FxWVdYc09ZQ0ZWSlJoUW9kYkdVQ1dn";
+    contextMenuEndpoint: {
+      commandMetadata: {
+        webCommandMetadata: {
+          ignoreNavigation: boolean;
+        };
+      };
+      liveChatItemContextMenuEndpoint: {
+        params: string; // e.g. "Q2g0S0hBb2FRMHMzVVhGWlYxaHpUMWxEUmxaS1VtaFJiMlJpUjFWRFYyY1FBQm80R2cwS0MwZDBaMk4zV2tweVZsWlpLaWNLR0ZWRE0wVm9jM1ZMWkVWclNUazVWRmRhZDFwblYzVjBaeElMUjNSblkzZGFTbkpXVmxrZ0FTZ0VNaG9LR0ZWRFFqbHhPVGxHZFY5eldqQk5lRXczZW1FNWFVaHFVUSUzRCUzRA==";
+      };
+    };
+    contextMenuAccessibility: {
+      accessibilityData: {
+        label: string; // e.g. "コメントの操作";
+      };
+    };
+    timestampUsec: string; // e.g. "1576156123164645";
+    authorPhoto: AuthorPhoto;
+    authorName: {
+      simpleText: string; // e.g. "mh sn";
+    };
+    authorExternalChannelId: string; // e.g. "UCB9q99Fu_sZ0MxL7za9iHjQ";
+    timestampText: {
+      simpleText: string; // e.g. "3:09:11";
+    };
+    sticker: {
+      thumbnails: {
+        url: string; // e.g. "//lh3.googleusercontent.com/rUbx-Dfxq-jxzhmpjgx8UzYxIlZ03ri3DIrK9yI1LlG5ICd3dboM2B0jByVWg0ln38ZoneBBj7ChcVJntjs=s88-rwa";
+        width: number; // e.g. 88;
+        height: number; // e.g. 88;
+      }[]; // 2 items, 88x88 & 176x176
+      accessibility: {
+        accessibilityData: {
+          label: string; // "「GG」と言って称賛するようにうなづきながら拍手をするカバのキャラクター";
+        };
+      };
+    };
+    moneyChipBackgroundColor: number; // e.g. 4280150454;
+    moneyChipTextColor: number; // e.g. 4278190080;
+    purchaseAmountText: {
+      simpleText: string; // "￥500";
+    };
+    stickerDisplayWidth: number; // e.g. 88;
+    stickerDisplayHeight: number; // e.g. 88;
+    backgroundColor: number; // e.g. 4278239141;
+    authorNameTextColor: number; // e.g. 2315255808;
+  };
+};
+
+//
+export type PlaceholderRendererItem = {
+  liveChatPlaceholderItemRenderer: {
+    id: string; // e.g. "CkUKGkNNeTJvTUdDZ09ZQ0ZXdjB3UW9kNHpNUEZREidDTXJGXzd1Q2dPWUNGUmhPV0FvZFlNNE5HUTE1NzQ1MDEzMTkzMjk%3D",
+    timestampUsec: string; // e.g. "1574501324692300"
+  };
+};
+
+export type MembershipRendererItem = {
+  liveChatMembershipItemRenderer: {
+    id: string; // e.g. "ChwKGkNPdXItTHYyMWVjQ0ZZbDFtQW9kbjhNQVVB";
+    timestampUsec: string; // e.g. "1581851076335083";
+    authorExternalChannelId: string; // e.g. "UCF_751r_ENb54A-y8QMgqtA";
+    headerSubtext: {
+      runs: {
+        text: string; // e.g. "新規メンバー";
+      }[]; // 1 item
+    };
+    authorName: {
+      simpleText: string; // e.g. "ハチ";
+    };
+    authorPhoto: AuthorPhoto;
+    authorBadges: {
+      liveChatAuthorBadgeRenderer: liveChatAuthorBadgeRendererMember;
+    }[];
+    contextMenuEndpoint: {
+      commandMetadata: {
+        webCommandMetadata: {
+          ignoreNavigation: boolean;
+        };
+      };
+      liveChatItemContextMenuEndpoint: {
+        params: string; // e.g. "Q2g0S0hBb2FRMDkxY2kxTWRqSXhaV05EUmxsc01XMUJiMlJ1T0UxQlZVRVFBQm80R2cwS0MyZG9WV05XY0hSM04xbFZLaWNLR0ZWRE0wVm9jM1ZMWkVWclNUazVWRmRhZDFwblYzVjBaeElMWjJoVlkxWndkSGMzV1ZVZ0FTZ0VNaG9LR0ZWRFJsODNOVEZ5WDBWT1lqVTBRUzE1T0ZGTlozRjBRUSUzRCUzRA==";
+      };
+    };
+    contextMenuAccessibility: {
+      accessibilityData: {
+        label: string; // e.g. "コメントの操作";
+      };
+    };
+  };
+};
+
+//
+type AuthorPhoto = {
+  thumbnails: {
+    url: string; // e.g. "https://yt3.ggpht.com/-3k7QNEiQCWQ/AAAAAAAAAAI/AAAAAAAAAAA/46KJsoSwmog/s32-c-k-no-mo-rj-c0xffffff/photo.jpg";
+    width: number; // e.g. 32
+    height: number; // 3.g. 32
+  }[]; // 2 items (32x32 & 64x64 images) @2020-07-03
 };
 
 //

@@ -5,6 +5,8 @@ import { YTContinuationInitialData } from "../YouTube/domain";
 import { GetChatCommentPartially, Comment } from "../domain";
 import { messageRenderer2comment } from "../YouTube/MessageRenderer2comment";
 import { engagementRenderer2comment } from "../YouTube/EngagementRenderer2comment";
+import { paidMessageRenderer2comment } from "../YouTube/PaidMessageRenderer2comment";
+import { paidStickerRenderer2comment } from "../YouTube/PaidStickerRenderer2comment";
 
 /**
  * Get YouTube Live Archive chat comments corresponding specified comment continuation ID
@@ -51,16 +53,27 @@ export const getChatCommentPartially: GetChatCommentPartially = async (
           return engagementRenderer2comment(item, relMills);
         } else if ("liveChatTextMessageRenderer" in item) {
           return messageRenderer2comment(item, relMills);
+        } else if ("liveChatPaidMessageRenderer" in item) {
+          return paidMessageRenderer2comment(item, relMills);
+        } else if ("liveChatPaidStickerRenderer" in item) {
+          return paidStickerRenderer2comment(item, relMills);
+        } else if ("liveChatMembershipItemRenderer" in item) {
+          return undefined;
+        } else if ("liveChatPlaceholderItemRenderer" in item) {
+          return undefined;
         } else {
           // other render action
-          console.error("yet-implemented render action");
+          console.error("=====\nyet-implemented render action");
           console.error(JSON.stringify(item, undefined, 2));
           return undefined;
         }
       } else {
         // other action
-        console.error("yet-implemented action");
+        console.error("=====\nyet-implemented action");
         console.error(JSON.stringify(item, undefined, 2));
+        console.error(
+          JSON.stringify(action?.replayChatItemAction?.actions, undefined, 2)
+        );
         return undefined;
       }
     }
