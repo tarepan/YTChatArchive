@@ -46,24 +46,35 @@ export async function getThenSaveComments(
   }
 }
 
+export async function getAllComments(
+  videoID: string,
+  streamerName: string
+): Promise<void> {
+  // acquire initial continuation ID
+  let initialContID: string;
+  try {
+    initialContID = await getInitialContinuationID(videoID);
+  } catch (e) {
+    console.error("maybe no live chat error?");
+    return;
+  }
+
+  // reset files
+  fs.writeFileSync(`./output/${streamerName}_${videoID}.ndjson`, "");
+  fs.writeFileSync(`./output/${streamerName}_${videoID}.txt`, "");
+
+  // get remaining comments
+  await getThenSaveComments(
+    initialContID,
+    `./output/${streamerName}_${videoID}`
+  );
+}
+
 if (require.main === module) {
   const streamerName = "Uge";
-  const videoID = "Yh88B1zLl5c";
+  const videoID = "qjEtlDcGbeM";
   (async () => {
-    const initialContID = await getInitialContinuationID(videoID);
-
-    // reset files
-    fs.writeFileSync(`./output/${streamerName}_${videoID}.ndjson`, "");
-    fs.writeFileSync(`./output/${streamerName}_${videoID}.txt`, "");
-
-    try {
-      await getThenSaveComments(
-        initialContID,
-        `./output/${streamerName}_${videoID}`
-      );
-    } catch (e) {
-      console.error(e);
-    }
+    await getAllComments(videoID, streamerName);
     statUniqueUsers(`./output/${streamerName}_${videoID}.ndjson`);
   })();
   // coco R5BjQipbOYU  20min # 5854, unique 1583
