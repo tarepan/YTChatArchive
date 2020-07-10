@@ -41,43 +41,50 @@ export const getChatCommentPartially: GetChatCommentPartially = async (
   }
 
   // extraction: comments
-  const comments = ytInitialData.continuationContents.liveChatContinuation.actions.map(
-    (action) => {
-      const relMills = action?.replayChatItemAction?.videoOffsetTimeMsec;
-      const item =
-        action?.replayChatItemAction?.actions[0]?.addChatItemAction?.item;
-      //                                        .liveChatMembershipItemRenderer
-      //                                        .addLiveChatTickerItemAction
-      if (relMills !== undefined && item !== undefined) {
-        if ("liveChatViewerEngagementMessageRenderer" in item) {
-          return engagementRenderer2comment(item, relMills);
-        } else if ("liveChatTextMessageRenderer" in item) {
-          return messageRenderer2comment(item, relMills);
-        } else if ("liveChatPaidMessageRenderer" in item) {
-          return paidMessageRenderer2comment(item, relMills);
-        } else if ("liveChatPaidStickerRenderer" in item) {
-          return paidStickerRenderer2comment(item, relMills);
-        } else if ("liveChatMembershipItemRenderer" in item) {
-          return undefined;
-        } else if ("liveChatPlaceholderItemRenderer" in item) {
-          return undefined;
-        } else {
-          // other render action
-          console.error("=====\nyet-implemented render action");
-          console.error(JSON.stringify(item, undefined, 2));
-          return undefined;
+  const comments = ytInitialData?.continuationContents?.liveChatContinuation
+    ?.actions
+    ? ytInitialData.continuationContents.liveChatContinuation.actions.map(
+        (action) => {
+          const relMills = action?.replayChatItemAction?.videoOffsetTimeMsec;
+          const item =
+            action?.replayChatItemAction?.actions[0]?.addChatItemAction?.item;
+          //                                        .liveChatMembershipItemRenderer
+          //                                        .addLiveChatTickerItemAction
+          if (relMills !== undefined && item !== undefined) {
+            if ("liveChatViewerEngagementMessageRenderer" in item) {
+              return engagementRenderer2comment(item, relMills);
+            } else if ("liveChatTextMessageRenderer" in item) {
+              return messageRenderer2comment(item, relMills);
+            } else if ("liveChatPaidMessageRenderer" in item) {
+              return paidMessageRenderer2comment(item, relMills);
+            } else if ("liveChatPaidStickerRenderer" in item) {
+              return paidStickerRenderer2comment(item, relMills);
+            } else if ("liveChatMembershipItemRenderer" in item) {
+              return undefined;
+            } else if ("liveChatPlaceholderItemRenderer" in item) {
+              return undefined;
+            } else {
+              // other render action
+              console.error("=====\nyet-implemented render action");
+              console.error(JSON.stringify(item, undefined, 2));
+              return undefined;
+            }
+          } else {
+            // other action
+            console.error("=====\nyet-implemented action");
+            console.error(JSON.stringify(item, undefined, 2));
+            console.error(
+              JSON.stringify(
+                action?.replayChatItemAction?.actions,
+                undefined,
+                2
+              )
+            );
+            return undefined;
+          }
         }
-      } else {
-        // other action
-        console.error("=====\nyet-implemented action");
-        console.error(JSON.stringify(item, undefined, 2));
-        console.error(
-          JSON.stringify(action?.replayChatItemAction?.actions, undefined, 2)
-        );
-        return undefined;
-      }
-    }
-  );
+      )
+    : [];
   const commentsNonNullable = comments.filter(
     (c) => c !== undefined
   ) as Comment[];
