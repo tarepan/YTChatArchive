@@ -1,7 +1,8 @@
-const fs = require("fs");
-const ndjson = require("ndjson");
+import fs from "fs";
+import ndjson from "ndjson";
 
 import { Comment } from "../domain";
+import { countCommentByUsers } from "./countCommentByUser";
 
 export function statUniqueUsers(commentPath: string): void {
   const comments: Comment[] = [];
@@ -12,37 +13,21 @@ export function statUniqueUsers(commentPath: string): void {
       comments.push(...obj);
     })
     .on("end", () => {
-      // name
-      const commenterNames = comments.map((v) => v.author.name);
-      const uniqueCommenterNames = new Set<string>();
-      commenterNames.forEach((name) => uniqueCommenterNames.add(name));
-      const numberUniqueCommenters = Array.from(uniqueCommenterNames.values())
-        .length;
-      // id
-      const commentersID = comments.map((v) => v.author.id);
-      const uniqueCommenterIDs = new Set<string>();
-      commentersID.forEach((id) => uniqueCommenterIDs.add(id));
-      // uniqueCommenters2.forEach(c => console.log(c));
-
-      const userFreq = Array.from(uniqueCommenterNames.values()).map(
-        (name) =>
-          [name, commenterNames.filter((cName) => cName === name).length] as [
-            string,
-            number
-          ]
+      const commenters = countCommentByUsers(comments);
+      commenters.sort(
+        (commenterA, commenterB) => commenterA.count - commenterB.count
       );
-      userFreq.sort(([nameA, freqA], [nameB, freqB]) => freqA - freqB);
-      // .forEach(([name, freq]) => console.log(`${name}: ${freq}`));
 
       // output
       console.log(
-        `${commentPath} #comment: ${commenterNames.length} #Commenters: ${numberUniqueCommenters}`
+        `${commentPath} #comment: ${comments.length} #Commenters: ${commenters.length}`
       );
+      // commenters.forEach((commenter) => console.log(`${commenter.identity.name}: ${commenter.count}`));
     });
 }
 
 if (require.main === module) {
   const streamerName = "Uge";
-  const videoID = "7ggdJdegn-Q";
+  const videoID = "Yh88B1zLl5c";
   statUniqueUsers(`./output/${streamerName}_${videoID}.ndjson`);
 }
