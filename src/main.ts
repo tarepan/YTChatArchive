@@ -56,7 +56,7 @@ export async function getAllComments(
     initialContID = await getInitialContinuationID(videoID);
   } catch (e) {
     console.error("maybe no live chat error?");
-    return;
+    throw new Error("maybe no live chat error?");
   }
 
   // reset files
@@ -75,7 +75,11 @@ if (require.main === module) {
   const videoID = "qjEtlDcGbeM";
   (async () => {
     await getAllComments(videoID, streamerName);
-    statUniqueUsers(`./output/${streamerName}_${videoID}.ndjson`);
+    statUniqueUsers(
+      `./output/${streamerName}_${videoID}.ndjson`,
+      streamerName,
+      videoID
+    );
   })();
   // coco R5BjQipbOYU  20min # 5854, unique 1583
   // uge  Yh88B1zLl5c 110min # 3236, unique  300
